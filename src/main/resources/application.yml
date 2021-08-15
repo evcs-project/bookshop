@@ -2,8 +2,8 @@
 
 spring:
   datasource:
-    username: shopmaster
-    password: springbook11
+    username: 
+    password:
     url: jdbc:mysql://shop-book.ciclmc7wjq3o.ap-northeast-2.rds.amazonaws.com:3306/shop_book
     driver-class-name: org.mariadb.jdbc.Driver
 
