@@ -34,7 +34,8 @@ public class BookRepositoryImpl implements BookRepositoryCustom{
     }
 
     @Override
-    public Page<Book> searchByWriter(String writer, Pageable pageable) {
+    public Page<Book> searchByWriter(String writer, Pageable pageable)
+    {
         QueryResults<Book> bookQueryResults = jpaQueryFactory.selectFrom(QBook.book)
                 .where(writercontain(writer))
                 .offset(pageable.getOffset())

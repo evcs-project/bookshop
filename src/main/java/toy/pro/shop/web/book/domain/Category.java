@@ -1,4 +1,4 @@
-package toy.pro.shop.web.category.domain;
+package toy.pro.shop.web.book.domain;
 
 import lombok.Getter;
 
@@ -11,5 +11,6 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "category_id")
     private Long categoryId;
+
     private String categoryName;
 }

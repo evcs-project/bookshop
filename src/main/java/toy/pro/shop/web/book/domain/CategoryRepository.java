@@ -1,4 +1,4 @@
-package toy.pro.shop.web.category.domain;
+package toy.pro.shop.web.book.domain;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

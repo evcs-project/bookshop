@@ -1,19 +1,25 @@
 package toy.pro.shop.web.order.domain;
 
-import lombok.Getter;
+import toy.pro.shop.common.Money;
+import toy.pro.shop.web.book.domain.BookId;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
-@Entity
-@Getter
+@Embeddable
 public class OrdersBook {
 
-    @Id
-    @GeneratedValue
-    private Long ordersBook_Id;
+    @Embedded
+    @AttributeOverrides({@AttributeOverride(name = "id", column = @Column(name = "order_book_id"))})
+    private BookId bookId;
 
+    @Embedded
+    @AttributeOverrides({@AttributeOverride(name = "value", column = @Column(name = "price"))})
+    private Money price;
 
+    @Column(name = "quantity")
+    private int quantity;
 
+    @AttributeOverrides({@AttributeOverride(name = "value", column = @Column(name = "amounts"))})
+    @Embedded
+    private Money amounts;
 }
