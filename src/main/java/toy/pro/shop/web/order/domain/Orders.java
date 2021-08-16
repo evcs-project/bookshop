@@ -22,8 +22,8 @@ public class Orders {
     @OrderColumn(name = "order_book_idx")
     private List<OrdersBook> ordersBookList;
 
-    @Embedded
     @AttributeOverrides({@AttributeOverride(name = "value", column = @Column(name = "total_price"))})
+    @Embedded
     private Money totalPrice;
 
     @Enumerated(EnumType.STRING)
@@ -52,9 +52,10 @@ public class Orders {
         }
     }
 
-    /*private void calculateTotalAmounts() {
-        this.totalPrice = new Money(ordersBookList.stream()
-                .mapToInt(x -> x.getAmounts().getValue()).sum());
-    }*/
+    private void calculateTotalAmounts()
+    {
+        int totalPrice = ordersBookList.stream().mapToInt(x -> x.getAmounts().getValue()).sum();
+        this.totalPrice = new Money(totalPrice);
+    }
 
 }

@@ -10,14 +10,15 @@ import javax.persistence.*;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Embeddable
+@Getter
 public class OrdersBook {
 
     @Embedded
     @AttributeOverrides({@AttributeOverride(name = "id", column = @Column(name = "order_book_id"))})
     private BookId bookId;
 
-    @Embedded
     @AttributeOverrides({@AttributeOverride(name = "value", column = @Column(name = "price"))})
+    @Embedded
     private Money price;
 
     @Column(name = "quantity")

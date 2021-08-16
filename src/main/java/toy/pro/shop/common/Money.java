@@ -1,40 +1,35 @@
 package toy.pro.shop.common;
 
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.Embeddable;
 
-
-@NoArgsConstructor
-@Getter
 @Embeddable
+@NoArgsConstructor
 @Access(AccessType.FIELD)
 public class Money {
-    private String value;
+    private int value;
 
-    public Money(String value) {
-        this.value = value;
-    }
-
-    public Integer getVal()
+    public Money(int value)
     {
-        int wonIdx = this.value.lastIndexOf("원");
-        String result =  this.value.substring(0, wonIdx);
-        return Integer.parseInt(result);
+        this.value = value;
     }
 
     public Money multiply(int multiplier)
     {
-        int moneyVal = getVal() * multiplier;
-        return new Money(addWon(moneyVal));
+        return new Money(value * multiplier);
     }
 
-    public static String addWon(int moneyVal)
+    public int getValue()
     {
-        return moneyVal + "원";
+        return value;
     }
 
+    @Override
+    public String toString()
+    {
+        return Integer.toString(value);
+    }
 }

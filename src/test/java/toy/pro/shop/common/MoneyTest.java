@@ -8,12 +8,5 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @SpringBootTest
 public class MoneyTest {
 
-    @Test
-    void getValTest()
-    {
-        Money money = new Money("123300원");
-        Integer val = money.getVal();
 
-        assertEquals(123300, val);
-    }
 }
