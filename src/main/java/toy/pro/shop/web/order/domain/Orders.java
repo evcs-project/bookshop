@@ -1,6 +1,7 @@
 package toy.pro.shop.web.order.domain;
 
 import lombok.Getter;
+import org.springframework.util.ObjectUtils;
 import toy.pro.shop.common.Money;
 import toy.pro.shop.web.member.domain.MemberId;
 
@@ -46,7 +47,7 @@ public class Orders {
 
     private void verifyAtLeastOneOrMoreOrderLines(List<OrdersBook> orderLines)
     {
-        if (orderLines == null || orderLines.isEmpty())
+        if (ObjectUtils.isEmpty(orderLines))
         {
             throw new IllegalArgumentException("책 주문 최소 1개 이상이여야 합니다.");
         }
@@ -54,7 +55,7 @@ public class Orders {
 
     private void calculateTotalAmounts()
     {
-        int totalPrice = ordersBookList.stream().mapToInt(x -> x.getAmounts().getValue()).sum();
+        int totalPrice = ordersBookList.stream().mapToInt(ordersBook -> ordersBook.getAmounts().getValue()).sum();
         this.totalPrice = new Money(totalPrice);
     }
 

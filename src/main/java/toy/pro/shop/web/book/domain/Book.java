@@ -2,6 +2,7 @@ package toy.pro.shop.web.book.domain;
 
 import lombok.Getter;
 import lombok.ToString;
+import toy.pro.shop.common.Money;
 
 import javax.persistence.*;
 
@@ -20,7 +21,9 @@ public class Book {
     private String bookNm;
     private String writer;
 
-    private String price;
+    @AttributeOverrides({@AttributeOverride(name = "value", column = @Column(name = "price"))})
+    @Embedded
+    private Money price;
 
     @Column(name = "thumbnail_url")
     private String thumbNail;
