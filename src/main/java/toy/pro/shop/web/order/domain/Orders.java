@@ -2,6 +2,7 @@ package toy.pro.shop.web.order.domain;
 
 import lombok.Getter;
 import toy.pro.shop.common.Money;
+import toy.pro.shop.web.member.domain.MemberId;
 
 import javax.persistence.*;
 import java.util.List;
@@ -33,5 +34,27 @@ public class Orders {
 
     @Embedded
     private ShippingInfo shippingInfo;
+
+    public Orders(
+            List<OrdersBook> ordersBookList, OrderState orderState, Orderer orderer, ShippingInfo shippingInfo)
+    {
+        this.ordersBookList = ordersBookList;
+        this.orderState = orderState;
+        this.orderer = orderer;
+        this.shippingInfo = shippingInfo;
+    }
+
+    private void verifyAtLeastOneOrMoreOrderLines(List<OrdersBook> orderLines)
+    {
+        if (orderLines == null || orderLines.isEmpty())
+        {
+            throw new IllegalArgumentException("책 주문 최소 1개 이상이여야 합니다.");
+        }
+    }
+
+    /*private void calculateTotalAmounts() {
+        this.totalPrice = new Money(ordersBookList.stream()
+                .mapToInt(x -> x.getAmounts().getValue()).sum());
+    }*/
 
 }
