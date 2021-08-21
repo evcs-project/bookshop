@@ -8,13 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.util.ObjectUtils;
-import toy.pro.shop.web.book.dto.BookSearchDto;
-import toy.pro.shop.web.book.dto.BookSearchRequestDto;
+import toy.pro.shop.web.book.dto.response.BookSearchResponseDto;
+import toy.pro.shop.web.book.dto.request.BookSearchRequestDto;
 
 import javax.persistence.EntityManager;
-import java.util.List;
 
 import static toy.pro.shop.web.book.domain.QBook.*;
 
@@ -29,52 +27,33 @@ public class BookRepositoryImpl implements BookRepositoryCustom{
     }
 
     @Override
-    public Page<Book> searchByBookNm(String bookNm, Pageable pageable) {
-        QueryResults<Book> bookQueryResults = jpaQueryFactory.selectFrom(book)
-                .where(bookNmcontain(bookNm))
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
-                .fetchResults();
-        List<Book> results = bookQueryResults.getResults();
-        long total = bookQueryResults.getTotal();
-        return new PageImpl<>(results,pageable,total);
-    }
-
-    @Override
-    public Page<Book> searchByWriter(String writer, Pageable pageable)
-    {
-        QueryResults<Book> bookQueryResults = jpaQueryFactory.selectFrom(book)
-                .where(writercontain(writer))
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
-                .fetchResults();
-        List<Book> results = bookQueryResults.getResults();
-        long total = bookQueryResults.getTotal();
-        return new PageImpl<>(results,pageable,total);
-    }
-
-    @Override
-    public Page<BookSearchDto> search(BookSearchRequestDto requestDto)
+    public Page<BookSearchResponseDto> search(BookSearchRequestDto requestDto)
     {
         PageRequest pageable = PageRequest.of(requestDto.getPage(), requestDto.getSize());
 
-        QueryResults<BookSearchDto> results = jpaQueryFactory
+        QueryResults<BookSearchResponseDto> results = jpaQueryFactory
                 .select(
-                        Projections.constructor(BookSearchDto.class,
+                        Projections.constructor(
+                                BookSearchResponseDto.class,
                                 book.bookId,
                                 book.bookNm,
                                 book.writer,
                                 book.publisher,
                                 book.isbn,
-                                book.section
+                                book.thumbNail,
+                                book.category.categoryId,
+                                book.category.categoryName,
+                                book.price.value.as("price")
                         )
                 )
                 .from(book)
+                .innerJoin(book.category)
                 .where(
                         bookNmEq(requestDto.getBookNm()),
                         bookWriterEq(requestDto.getWriter()),
                         bookPublishEq(requestDto.getPublisher()),
-                        bookIsbnEq(requestDto.getIsbn())
+                        bookIsbnEq(requestDto.getIsbn()),
+                        cateIdEq(requestDto.getCategoryId())
                 )
                 .offset(getSearchSaveBookOffset(pageable))
                 .limit(pageable.getPageSize())
@@ -83,6 +62,11 @@ public class BookRepositoryImpl implements BookRepositoryCustom{
 
 
         return new PageImpl<>(results.getResults(), pageable, results.getTotal());
+    }
+
+    private BooleanExpression cateIdEq(Long categoryId)
+    {
+        return ObjectUtils.isEmpty(categoryId) ? null : book.category.categoryId.eq(categoryId);
     }
 
     private BooleanExpression bookIsbnEq(String isbn)
@@ -106,13 +90,6 @@ public class BookRepositoryImpl implements BookRepositoryCustom{
 
     private BooleanExpression bookNmEq(String bookNm) {
         return ObjectUtils.isEmpty(bookNm) ? null : book.bookNm.contains(bookNm);
-    }
-
-    public BooleanExpression bookNmcontain(String bookNm){
-       return bookNm != null ? book.bookNm.contains(bookNm) : null;
-    }
-    public BooleanExpression writercontain(String writer){
-        return writer != null ? book.writer.contains(writer) : null;
     }
 
 }

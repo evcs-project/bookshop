@@ -1,4 +1,4 @@
-package toy.pro.shop.web.book.dto;
+package toy.pro.shop.web.book.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -17,5 +17,5 @@ public class BookSearchRequestDto {
     private String publisher;
     private String isbn;
     private String writer;
-
+    private Long categoryId;
 }
