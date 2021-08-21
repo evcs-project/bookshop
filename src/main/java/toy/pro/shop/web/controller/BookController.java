@@ -1,5 +1,6 @@
 package toy.pro.shop.web.controller;
 
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
@@ -16,16 +17,17 @@ public class BookController {
 
     private final BookFindService bookFindService;
 
+    @ApiOperation(value = "책 검색", notes = "조건에 맞는 책을 조회 합니다. (페이징 적용)")
     @GetMapping("/search")
     public Page<BookSearchResponseDto> searchBooks(BookSearchRequestDto requestDto)
     {
         return bookFindService.search(requestDto);
     }
 
+    @ApiOperation(value = "책 ID로 단건 검색", notes = "책 ID로 단건을 조회합니다.")
     @GetMapping("/{bookId}")
     public BookInfoResponseDto searchBook(@PathVariable(value = "bookId") Long bookId)
     {
         return bookFindService.searchBookById(bookId);
     }
-
 }
