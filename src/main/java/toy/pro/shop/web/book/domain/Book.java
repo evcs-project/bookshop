@@ -1,13 +1,11 @@
 package toy.pro.shop.web.book.domain;
 
 import lombok.Getter;
-import lombok.ToString;
 import toy.pro.shop.common.Money;
 
 import javax.persistence.*;
 
 @Getter
-@ToString
 @Entity
 public class Book {
 
@@ -30,6 +28,8 @@ public class Book {
     private String description;
     private String section;
 
+    @Column(name = "publisher")
+    private String publisher;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
     private Category category;
