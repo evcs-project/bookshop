@@ -11,6 +11,8 @@ import toy.pro.shop.web.cart.domain.Cart;
 import toy.pro.shop.web.cart.domain.CartRepository;
 import toy.pro.shop.web.cart.dto.CartRegistRequestDto;
 import toy.pro.shop.web.cart.dto.CartResponseDto;
+import toy.pro.shop.web.exception.ErrorCode;
+import toy.pro.shop.web.exception.GlobalApiException;
 import toy.pro.shop.web.member.domain.Member;
 import toy.pro.shop.web.member.domain.MemberRepository;
 
@@ -43,9 +45,9 @@ public class CartService {
     public Long registCart(CartRegistRequestDto cartRegistRequestDto){
 
         Book book = bookRepository.findById(cartRegistRequestDto.getBookid())
-                .orElseThrow(() -> new RuntimeException());
+                .orElseThrow(() -> new GlobalApiException(ErrorCode.DATA_NOT_FOUND));
         Member member = memberRepository.findById(cartRegistRequestDto.getMemberid())
-                .orElseThrow(() -> new RuntimeException());
+                .orElseThrow(() -> new GlobalApiException(ErrorCode.USER_NOT_FOUND));
         return cartRepository.save(new Cart(cartRegistRequestDto.getCount(),book,member)).getCartId();
     }
 
