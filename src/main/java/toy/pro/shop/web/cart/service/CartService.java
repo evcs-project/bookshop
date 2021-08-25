@@ -9,8 +9,9 @@ import toy.pro.shop.web.book.domain.Book;
 import toy.pro.shop.web.book.domain.BookRepository;
 import toy.pro.shop.web.cart.domain.Cart;
 import toy.pro.shop.web.cart.domain.CartRepository;
-import toy.pro.shop.web.cart.dto.CartRegistRequestDto;
-import toy.pro.shop.web.cart.dto.CartResponseDto;
+import toy.pro.shop.web.cart.dto.ResponseDto.CartDto;
+import toy.pro.shop.web.cart.dto.RequestDto.CartRegistRequestDto;
+import toy.pro.shop.web.cart.dto.ResponseDto.CartResponseDto;
 import toy.pro.shop.web.exception.ErrorCode;
 import toy.pro.shop.web.exception.GlobalApiException;
 import toy.pro.shop.web.member.domain.Member;
@@ -29,11 +30,19 @@ public class CartService {
 
 
     @Transactional(readOnly = true)
-    public List<CartResponseDto> getMycartlist(Long memberid, Pageable pageable){
+    public CartResponseDto getMycartlist(Long memberid, Pageable pageable){
         Page<Cart> cartByMemberId = cartRepository.findCartByMemberId(memberid, pageable);
 
-        return cartByMemberId.getContent().stream().map(CartResponseDto::toResponseDto)
+        List<CartDto> collect = cartByMemberId.getContent()
+                .stream().map(CartDto::toCartDto)
                 .collect(Collectors.toList());
+        if(collect.isEmpty()){
+            throw new GlobalApiException(ErrorCode.DATA_NOT_FOUND);
+        }
+        return CartResponseDto
+                .builder()
+                .cartDtoList(collect).build();
+
     }
 
     @Transactional
