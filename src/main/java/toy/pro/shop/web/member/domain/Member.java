@@ -6,8 +6,11 @@ import lombok.NoArgsConstructor;
 import toy.pro.shop.web.book.domain.Book;
 import toy.pro.shop.web.book.domain.BookId;
 import toy.pro.shop.web.cart.domain.Cart;
+import toy.pro.shop.web.review.domain.Review;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -28,5 +31,8 @@ public class Member {
     @ElementCollection
     @CollectionTable(name = "member_cart_book", joinColumns = @JoinColumn(name = "member_id"))
     private Set<BookId> bookIds;
+
+    @OneToMany(mappedBy = "member")
+    List<Review> reviewList = new ArrayList<>();
 
 }

@@ -2,8 +2,11 @@ package toy.pro.shop.web.book.domain;
 
 import lombok.Getter;
 import toy.pro.shop.common.Money;
+import toy.pro.shop.web.review.domain.Review;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Entity
@@ -33,4 +36,9 @@ public class Book {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
     private Category category;
+
+    @OneToMany(mappedBy = "book", fetch = FetchType.LAZY)
+    List<Review> reviewList = new ArrayList<>();
+
+
 }
