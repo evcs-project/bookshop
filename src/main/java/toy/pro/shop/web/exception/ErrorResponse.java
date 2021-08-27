@@ -2,6 +2,7 @@ package toy.pro.shop.web.exception;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
+import org.springframework.util.ObjectUtils;
 import org.springframework.validation.BindingResult;
 
 import java.util.List;
@@ -41,7 +42,7 @@ public class ErrorResponse {
                 .map(error -> ErrorResponse.FieldError.builder()
                         .field(error.getField())
                         .reason(error.getDefaultMessage())
-                        .value((String) error.getRejectedValue())
+                        .value(ObjectUtils.isEmpty(error.getRejectedValue()) ? "" : error.getRejectedValue().toString())
                         .build()
                 ).collect(Collectors.toList());
     }

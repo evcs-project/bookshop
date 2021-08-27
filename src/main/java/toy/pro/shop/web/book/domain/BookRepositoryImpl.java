@@ -60,7 +60,6 @@ public class BookRepositoryImpl implements BookRepositoryCustom{
                 .orderBy(book.bookId.asc())
                 .fetchResults();
 
-
         return new PageImpl<>(results.getResults(), pageable, results.getTotal());
     }
 
