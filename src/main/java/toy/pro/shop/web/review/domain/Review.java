@@ -26,12 +26,21 @@ public class Review {
     private String content;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name= "member_id")
+    @JoinColumn(name = "member_id")
     private Member member;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "book_id")
     private Book book;
+
+
+    public Review(String title, String content, Book book, Member member) {
+        this.title = title;
+        this.content = content;
+
+        this.book = book;
+        this.member = member;
+    }
 
     private Review(String content, String title)
     {
@@ -44,6 +53,7 @@ public class Review {
         this.content = content;
     }
 
+    // 생성 메서드
     public static Review creteReview(String content,String title)
     {
         return new Review(content,title);
@@ -54,15 +64,16 @@ public class Review {
         this.content=content;
     }
 
+    // 연관관계 메서드 - 양방향
     public void setMember(Member member)
     {
-        member.getReviewList().add(this);
         this.member = member;
+        member.getReviewList().add(this);
     }
 
     public void setBook(Book book)
     {
-        book.getReviewList().add(this);
         this.book=book;
+        book.getReviewList().add(this);
     }
 }
