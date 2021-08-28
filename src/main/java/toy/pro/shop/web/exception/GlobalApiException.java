@@ -6,16 +6,14 @@ import lombok.Getter;
 @Getter
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class GlobalApiException extends RuntimeException{
-    private String message;
+    private String mesaage;
     public GlobalApiException(ErrorCode errorCode)
     {
-
-        this.message = errorCode.getName();
+        this.mesaage = errorCode.getName();
     }
 
-    public GlobalApiException(String message)
+    public GlobalApiException(String mesaage)
     {
-
-        this.message = message;
+        this.mesaage = mesaage;
     }
 }
