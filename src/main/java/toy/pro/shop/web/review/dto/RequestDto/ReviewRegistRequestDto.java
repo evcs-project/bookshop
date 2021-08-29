@@ -1,21 +1,21 @@
 package toy.pro.shop.web.review.dto.RequestDto;
 
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import toy.pro.shop.web.book.domain.Book;
 import toy.pro.shop.web.member.domain.Member;
+import toy.pro.shop.web.review.domain.Review;
 
 import javax.validation.constraints.NotBlank;
 
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 public class ReviewRegistRequestDto {
 
     private Long bookId;
+    private Long memberId;
 
     @ApiModelProperty(value = "리뷰 제목")
     @NotBlank(message = "리뷰 제목을 입력해주세요.")
@@ -25,13 +25,19 @@ public class ReviewRegistRequestDto {
     @NotBlank(message = "리뷰 내용을 입력해주세요.")
     private String content;
 
-    private Long memberId;
-
-    public ReviewRegistRequestDto(String title, String contet, Long memberId, Long bookId) {
+    @Builder
+    public ReviewRegistRequestDto(String title, String content)
+    {
         this.title = title;
-        this.content = contet;
-        this.memberId = memberId;
-        this.bookId = bookId;
+        this.content = content;
+    }
+
+    public Review toEntity()
+    {
+        return Review.builder()
+                .title(title)
+                .content(content)
+                .build();
     }
 }
 

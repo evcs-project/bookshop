@@ -33,35 +33,16 @@ public class Review {
     @JoinColumn(name = "book_id")
     private Book book;
 
-
-    public Review(String title, String content, Book book, Member member) {
+    @Builder // 빌더 패턴 클래스 생성
+    public Review(Book book, Member member, String title, String content) {
         this.title = title;
         this.content = content;
-
-        this.book = book;
-        this.member = member;
     }
 
-    private Review(String content, String title)
+    public void reviewUpdate(String title, String content)
     {
+        this.title = title;
         this.content = content;
-        this.title=title;
-    }
-
-    public void setContent(String content)
-    {
-        this.content = content;
-    }
-
-    // 생성 메서드
-    public static Review creteReview(String content,String title)
-    {
-        return new Review(content,title);
-    }
-
-    public void updateReview(String title,String content){
-        this.title=title;
-        this.content=content;
     }
 
     // 연관관계 메서드 - 양방향
@@ -71,7 +52,7 @@ public class Review {
         member.getReviewList().add(this);
     }
 
-    public void setBook(Book book)
+        public void setBook(Book book)
     {
         this.book=book;
         book.getReviewList().add(this);
