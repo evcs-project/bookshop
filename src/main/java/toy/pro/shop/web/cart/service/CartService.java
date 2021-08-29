@@ -2,6 +2,7 @@ package toy.pro.shop.web.cart.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -9,6 +10,8 @@ import toy.pro.shop.web.book.domain.Book;
 import toy.pro.shop.web.book.domain.BookRepository;
 import toy.pro.shop.web.cart.domain.Cart;
 import toy.pro.shop.web.cart.domain.CartRepository;
+import toy.pro.shop.web.cart.dto.RequestDto.CartGetRequestDto;
+import toy.pro.shop.web.cart.dto.RequestDto.CartUpdateRequestDto;
 import toy.pro.shop.web.cart.dto.ResponseDto.CartDto;
 import toy.pro.shop.web.cart.dto.RequestDto.CartRegistRequestDto;
 import toy.pro.shop.web.cart.dto.ResponseDto.CartResponseDto;
@@ -30,29 +33,25 @@ public class CartService {
 
 
     @Transactional(readOnly = true)
-    public CartResponseDto getMycartlist(Long memberid, Pageable pageable){
-        Page<Cart> cartByMemberId = cartRepository.findCartByMemberId(memberid, pageable);
-
-        List<CartDto> collect = cartByMemberId.getContent()
-                .stream().map(CartDto::toCartDto)
-                .collect(Collectors.toList());
-        if(collect.isEmpty()){
-            throw new GlobalApiException(ErrorCode.DATA_NOT_FOUND);
-        }
-        return CartResponseDto
-                .builder()
-                .cartDtoList(collect).build();
-
+    public CartResponseDto getMycartlist(CartGetRequestDto cartGetRequestDto)
+    {
+        Page<Cart> cartByMemberId = cartRepository
+                .findCartByMemberId(cartGetRequestDto.getMemberid()
+                        , PageRequest.of(cartGetRequestDto.getPage()
+                                , cartGetRequestDto.getSize()));
+        return CartResponseDto.builder()
+                .cartDtoPage(cartByMemberId.map(CartDto::toCartDto)).build();
     }
 
     @Transactional
-    public void deleteCartById(Long cartid){
+    public void deleteCartById(Long cartid)
+    {
         cartRepository.deleteById(cartid);
     }
 
     @Transactional
-    public Long registCart(CartRegistRequestDto cartRegistRequestDto){
-
+    public Long registCart(CartRegistRequestDto cartRegistRequestDto)
+    {
         Book book = bookRepository.findById(cartRegistRequestDto.getBookid())
                 .orElseThrow(() -> new GlobalApiException(ErrorCode.DATA_NOT_FOUND));
         Member member = memberRepository.findById(cartRegistRequestDto.getMemberid())
@@ -61,8 +60,11 @@ public class CartService {
     }
 
     @Transactional
-    public Long UpdteCart(Long cartid,int count){
-        return cartRepository.updateCartcount(cartid, count);
+    public Long UpdteCart(CartUpdateRequestDto cartUpdateRequestDto)
+    {
+        return cartRepository
+                .updateCartcount(cartUpdateRequestDto.getCartid()
+                        , cartUpdateRequestDto.getCount());
     }
 
 }

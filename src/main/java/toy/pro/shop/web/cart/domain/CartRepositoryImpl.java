@@ -41,10 +41,10 @@ public class CartRepositoryImpl implements CartRepositoryCustom {
     }
 
     @Override
-    public Long updateCartcount(Long id, int count) {
+    public Long updateCartcount(Long cartid, int count) {
         long execute = jpaQueryFactory.update(cart)
                 .set(cart.count, count)
-                .where(cart.cartId.eq(id))
+                .where(cart.cartId.eq(cartid))
                 .execute();
         entityManager.flush();
         entityManager.clear();

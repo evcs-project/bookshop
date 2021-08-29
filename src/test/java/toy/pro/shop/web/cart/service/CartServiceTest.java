@@ -12,7 +12,9 @@ import toy.pro.shop.web.book.dto.request.BookSearchRequestDto;
 import toy.pro.shop.web.book.dto.response.BookSearchResponseDto;
 import toy.pro.shop.web.cart.domain.Cart;
 import toy.pro.shop.web.cart.domain.CartRepository;
+import toy.pro.shop.web.cart.dto.RequestDto.CartGetRequestDto;
 import toy.pro.shop.web.cart.dto.RequestDto.CartRegistRequestDto;
+import toy.pro.shop.web.cart.dto.RequestDto.CartUpdateRequestDto;
 import toy.pro.shop.web.cart.dto.ResponseDto.CartResponseDto;
 import toy.pro.shop.web.member.domain.Member;
 import toy.pro.shop.web.member.domain.MemberRepository;
@@ -20,7 +22,6 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
 @SpringBootTest
-
 class CartServiceTest {
 
     @Autowired
@@ -39,7 +40,6 @@ class CartServiceTest {
     @Test
     @DisplayName("유저가 책을 선택해서 개수를 정해서 장바구니에 넣는다")
     @Transactional
-    @Rollback
     public void cartregistTest(){
         memberRepository.save(new Member("이수근"));
         memberRepository.save(new Member("송민호"));
@@ -86,7 +86,6 @@ class CartServiceTest {
     @Test
     @DisplayName("장바구니에서 삭제하기")
     @Transactional
-    @Rollback
     public void deletecartTest(){
         memberRepository.save(new Member("이수근"));
         memberRepository.save(new Member("송민호"));
@@ -104,16 +103,15 @@ class CartServiceTest {
 
         Long aLong = cartService.registCart(new CartRegistRequestDto(bookId, 3, memid));
         Long aLong1 = cartService.registCart(new CartRegistRequestDto(bookId1, 5, memid));
+
         Long aLong2 = cartService.registCart(new CartRegistRequestDto(bookId2, 2, memid1));
         Long aLong3 = cartService.registCart(new CartRegistRequestDto(bookId, 7, memid1));
         Long aLong4 = cartService.registCart(new CartRegistRequestDto(bookId1, 9, memid1));
 
-        List<Cart> all = cartRepository.findAll();
-        assertThat(all.size()).isEqualTo(5);
-
         cartService.deleteCartById(aLong);
 
         List<Cart> all1 = cartRepository.findAll();
+
         assertThat(all1.size()).isEqualTo(4);
 
         cartService.deleteCartById(aLong3);
@@ -136,7 +134,6 @@ class CartServiceTest {
     @Test
     @DisplayName("멤버의 장바구니 조회하기")
     @Transactional
-    @Rollback
     public void getMyCartTest(){
         memberRepository.save(new Member("이수근"));
         memberRepository.save(new Member("송민호"));
@@ -158,28 +155,26 @@ class CartServiceTest {
         Long aLong3 = cartService.registCart(new CartRegistRequestDto(bookId, 7, memid1));
         Long aLong4 = cartService.registCart(new CartRegistRequestDto(bookId1, 9, memid1));
 
-        PageRequest of = PageRequest.of(0, 3);
 
-        CartResponseDto mycartlist = cartService.getMycartlist(memid, of);
-        CartResponseDto mycartlist1 = cartService.getMycartlist(memid1, of);
+        CartResponseDto mycartlist = cartService.getMycartlist(CartGetRequestDto.builder()
+                .size(3).page(0).Memberid(memid).build());
+        CartResponseDto mycartlist1 = cartService.getMycartlist(CartGetRequestDto.builder()
+                .size(3).page(0).Memberid(memid1).build());
 
-        assertThat(mycartlist.getCartDtoList().size()).isEqualTo(2);
-        assertThat(mycartlist1.getCartDtoList().size()).isEqualTo(3);
+        assertThat(mycartlist.getCartDtoPage().getContent().size()).isEqualTo(2);
+        assertThat(mycartlist1.getCartDtoPage().getContent().size()).isEqualTo(3);
 
-        assertThat(mycartlist.getCartDtoList().get(0).getCount()).isEqualTo(3);
-        assertThat(mycartlist.getCartDtoList().get(1).getCount()).isEqualTo(5);
+        assertThat(mycartlist.getCartDtoPage().getContent().get(0).getCount()).isEqualTo(3);
+        assertThat(mycartlist.getCartDtoPage().getContent().get(1).getCount()).isEqualTo(5);
 
-        assertThat(mycartlist1.getCartDtoList().get(0).getCount()).isEqualTo(2);
-        assertThat(mycartlist1.getCartDtoList().get(1).getCount()).isEqualTo(7);
-        assertThat(mycartlist1.getCartDtoList().get(2).getCount()).isEqualTo(9);
-        System.out.println(cartRepository.findAll().size());
-
+        assertThat(mycartlist1.getCartDtoPage().getContent().get(0).getCount()).isEqualTo(2);
+        assertThat(mycartlist1.getCartDtoPage().getContent().get(1).getCount()).isEqualTo(7);
+        assertThat(mycartlist1.getCartDtoPage().getContent().get(2).getCount()).isEqualTo(9);
     }
 
     @Test
     @DisplayName("카트의 수량을 수정 할 수 있다.")
     @Transactional
-    @Rollback
     public void updateCartTest(){
         memberRepository.save(new Member("이수근"));
         memberRepository.save(new Member("송민호"));
@@ -197,20 +192,25 @@ class CartServiceTest {
 
         Long aLong = cartService.registCart(new CartRegistRequestDto(bookId, 3, memid));
         Long aLong1 = cartService.registCart(new CartRegistRequestDto(bookId1, 5, memid));
+
         Long aLong2 = cartService.registCart(new CartRegistRequestDto(bookId2, 2, memid1));
         Long aLong3 = cartService.registCart(new CartRegistRequestDto(bookId, 7, memid1));
         Long aLong4 = cartService.registCart(new CartRegistRequestDto(bookId1, 9, memid1));
 
-        PageRequest of = PageRequest.of(0, 3);
 
-        cartService.UpdteCart(aLong,8);
-        cartService.UpdteCart(aLong3,15);
+        cartService.UpdteCart(CartUpdateRequestDto.builder().Cartid(aLong).count(13).build());
+        cartService.UpdteCart(CartUpdateRequestDto.builder().Cartid(aLong4).count(12).build());
 
-        CartResponseDto mycartlist = cartService.getMycartlist(memid, of);
-        CartResponseDto mycartlist1 = cartService.getMycartlist(memid1, of);
+        CartResponseDto mycartlist = cartService.getMycartlist(CartGetRequestDto.builder()
+                .size(3).page(0).Memberid(memid).build());
+        CartResponseDto mycartlist1 = cartService.getMycartlist(CartGetRequestDto.builder()
+                .size(3).page(0).Memberid(memid1).build());
 
-        assertThat(mycartlist.getCartDtoList().get(0).getCount()).isEqualTo(8);
-        assertThat(mycartlist1.getCartDtoList().get(1).getCount()).isEqualTo(15);
+        assertThat(mycartlist.getCartDtoPage().getContent().get(0).getCount()).isEqualTo(13);
+        assertThat(mycartlist1.getCartDtoPage().getContent().get(2).getCount()).isEqualTo(12);
     }
+
+
+
 
 }

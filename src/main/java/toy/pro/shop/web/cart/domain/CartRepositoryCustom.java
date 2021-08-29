@@ -7,7 +7,7 @@ public interface CartRepositoryCustom {
 
     Page<Cart> findCartByMemberId(Long id, Pageable pageable);
 
-    Long updateCartcount(Long id,int count);
+    Long updateCartcount(Long cartid,int count);
 
 
 }

@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.domain.Page;
 import toy.pro.shop.web.cart.dto.ResponseDto.CartDto;
 
 import java.util.List;
@@ -14,6 +15,6 @@ import java.util.List;
 @Builder
 public class CartResponseDto {
 
-    List<CartDto> cartDtoList;
+    Page<CartDto> cartDtoPage;
 
 }
