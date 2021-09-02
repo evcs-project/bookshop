@@ -52,7 +52,7 @@ public class JwtController {
                 new UsernamePasswordAuthenticationToken(jwtRequest.getEmail(), jwtRequest.getPassword());
 
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
-
+        Member member = memberRepository.findByEmail(jwtRequest.getEmail()).orElseThrow(()-> new GlobalApiException(ErrorCode.USER_NOT_FOUND));
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String token = tokenProvider.createToken(authentication);
 
@@ -60,7 +60,7 @@ public class JwtController {
         httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + token);
 
         Set<String> roleSets = AuthorityUtils.authorityListToSet(authentication.getAuthorities());
-        return new ResponseEntity<>(new JwtResponse(jwtRequest.getEmail(), token, roleSets), httpHeaders, HttpStatus.OK);
+        return new ResponseEntity<>(new JwtResponse(jwtRequest.getEmail(), token, roleSets, member.getId()), httpHeaders, HttpStatus.OK);
     }
 
     @PostMapping("/log")
@@ -68,11 +68,12 @@ public class JwtController {
     {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 
-        String token = tokenProvider.createToken(authentication);
         Member member = memberRepository.findByEmail(userDetails.getUsername())
                 .orElseThrow(
                         ()->  new GlobalApiException(ErrorCode.USER_NOT_FOUND));
 
-        return new JwtResponse(userDetails.getUsername(), token);
+        Set<String> roleSets = AuthorityUtils.authorityListToSet(authentication.getAuthorities());
+        
+        return new JwtResponse(userDetails.getUsername(), roleSets, member.getId());
     }
 }

@@ -20,7 +20,7 @@ public class OrderService {
 
     public void order(OrderRequestDto orderRequestDto)
     {
-//        Orderer orderer =
+
         Orders order = Orders.createOrder(
                 orderRequestDto.getOrdersBook(), new OrdererDto(1L, "TestUer"), orderRequestDto.getShippingInfoRequestDto());
 
