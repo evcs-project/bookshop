@@ -1,5 +1,4 @@
 
-
 spring:
   datasource:
     username: shopmaster
@@ -15,3 +14,8 @@ spring:
         format_sql: true
     hibernate:
       ddl-auto: update
+jwt:
+  header: Authorization
+  secret: c2lsdmVybmluZS10ZWNoLXNwcmluZy1ib290LWp3dC10dXRvcmlhbC1zZWNyZXQtc2lsdmVybmluZS10ZWNoLXNwcmluZy1ib290LWp3dC10dXRvcmlhbC1zZWNyZXQK
+  token-validity-in-seconds: 86400
+

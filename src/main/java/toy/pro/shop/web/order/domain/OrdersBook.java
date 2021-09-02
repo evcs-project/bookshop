@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import toy.pro.shop.common.Money;
+import toy.pro.shop.web.book.domain.Book;
 import toy.pro.shop.web.book.domain.BookId;
 
 import javax.persistence.*;
@@ -36,6 +37,10 @@ public class OrdersBook {
         this.amounts = calculateAmounts();
     }
 
+    public static OrdersBook createOrdersBook(BookId bookId, Money price, Integer quantity)
+    {
+        return new OrdersBook(bookId, new Money(price.getValue()), quantity);
+    }
     private Money calculateAmounts()
     {
         return price.multiply(quantity);
