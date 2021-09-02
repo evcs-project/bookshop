@@ -32,7 +32,7 @@ public class CartController {
 
     @ApiOperation("나의 장바구니 가져오기")
     @GetMapping("/mycart/{id}")
-    public CartResponseDto getMyCart(@RequestBody @Valid CartGetRequestDto cartGetRequestDto)
+    public CartResponseDto getMyCart(@Valid CartGetRequestDto cartGetRequestDto)
     {
         return cartService.getMycartlist(cartGetRequestDto);
     }
