@@ -17,6 +17,7 @@ import toy.pro.shop.web.cart.dto.RequestDto.CartRegistRequestDto;
 import toy.pro.shop.web.cart.dto.ResponseDto.CartResponseDto;
 import toy.pro.shop.web.exception.ErrorCode;
 import toy.pro.shop.web.exception.GlobalApiException;
+import toy.pro.shop.web.member.auth.AuthUtil;
 import toy.pro.shop.web.member.domain.Member;
 import toy.pro.shop.web.member.domain.MemberRepository;
 
@@ -35,8 +36,9 @@ public class CartService {
     @Transactional(readOnly = true)
     public CartResponseDto getMycartlist(CartGetRequestDto cartGetRequestDto)
     {
+        String curUserEmail = AuthUtil.getCurUserEmail();
         Page<Cart> cartByMemberId = cartRepository
-                .findCartByMemberId(cartGetRequestDto.getMemberid()
+                .findCartByMemberemail(curUserEmail
                         , PageRequest.of(cartGetRequestDto.getPage()
                                 , cartGetRequestDto.getSize()));
         return CartResponseDto.builder()
@@ -52,10 +54,11 @@ public class CartService {
     @Transactional
     public Long registCart(CartRegistRequestDto cartRegistRequestDto)
     {
+        String curUserEmail = AuthUtil.getCurUserEmail();
         Book book = bookRepository.findById(cartRegistRequestDto.getBookid())
                 .orElseThrow(() -> new GlobalApiException(ErrorCode.DATA_NOT_FOUND));
-        Member member = memberRepository.findById(cartRegistRequestDto.getMemberid())
-                .orElseThrow(() -> new GlobalApiException(ErrorCode.USER_NOT_FOUND));
+        Member member = memberRepository.findByEmail(curUserEmail)
+                .orElseThrow(()->new GlobalApiException(ErrorCode.USER_NOT_FOUND));
         return cartRepository.save(new Cart(cartRegistRequestDto.getCount(),book,member)).getCartId();
     }
 

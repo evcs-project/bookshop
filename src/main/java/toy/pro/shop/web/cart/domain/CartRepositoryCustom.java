@@ -5,7 +5,7 @@ import org.springframework.data.domain.Pageable;
 
 public interface CartRepositoryCustom {
 
-    Page<Cart> findCartByMemberId(Long id, Pageable pageable);
+    Page<Cart> findCartByMemberemail(String useremail, Pageable pageable);
 
     Long updateCartcount(Long cartid,int count);
 

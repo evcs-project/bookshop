@@ -19,13 +19,9 @@ public class CartGetRequestDto {
     @Min(value = 0, message = "최소 페이지 넘버는 0입니다.")
     private int page;
 
-
     @ApiModelProperty(value = "사이즈", example = "1", notes = "사이즈 최소값은 1입니다.", required = true)
     @NotNull(message = "사이즈를 입력해주세요")
     @Min(value = 1, message = "최소 사이즈는 1입니다.")
     private int size;
 
-    @ApiModelProperty(value = "멤버 ID", notes = "장바구니 가져올 멤버 ID",required = true)
-    @NotNull(message = "멤버 Id를 입력해주세요")
-    private Long Memberid;
 }

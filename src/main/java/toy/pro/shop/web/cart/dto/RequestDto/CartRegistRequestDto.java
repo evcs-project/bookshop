@@ -25,7 +25,5 @@ public class CartRegistRequestDto {
     private int count;
 
 
-    @ApiModelProperty(value = "멤버 ID", notes = "장바구니에 저장할 멤버 ID",required = true)
-    @NotNull(message = "멤버 Id를 입력해주세요")
-    private Long Memberid;
+
 }

@@ -27,10 +27,10 @@ public class CartRepositoryImpl implements CartRepositoryCustom {
     }
 
     @Override
-    public Page<Cart> findCartByMemberId(Long id, Pageable pageable) {
+    public Page<Cart> findCartByMemberemail(String useremail, Pageable pageable) {
         QueryResults<Cart> cartQueryResults = jpaQueryFactory.selectFrom(cart)
                 .join(cart.member, member)
-                .where(member.id.eq(id))
+                .where(member.email.eq(useremail))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetchResults();
