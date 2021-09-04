@@ -10,6 +10,7 @@ import toy.pro.shop.web.member.service.MemberService;
 
 import javax.validation.Valid;
 
+@CrossOrigin("*")
 @RestController
 @RequestMapping("/api/member")
 @RequiredArgsConstructor
