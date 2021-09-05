@@ -11,6 +11,7 @@ import javax.persistence.EntityManager;
 
 import java.util.List;
 
+import static toy.pro.shop.web.book.domain.QBook.book;
 import static toy.pro.shop.web.member.domain.QMember.member;
 import static toy.pro.shop.web.review.domain.QReview.review;
 
@@ -27,11 +28,11 @@ public class ReviewRepositoryImpI implements ReviewRepositoryCustom{
     }
 
     @Override
-    public Page<Review> findReviewByMemberId(Long id, Pageable pageable)
+    public Page<Review> findReviewByMemberEmail(String userEmail, Pageable pageable)
     {
         QueryResults<Review> reviewQueryResults = jpaQueryFactory.selectFrom(review)
                 .join(review.member, member)
-                .where(member.id.eq(id))
+                .where(member.email.eq(userEmail))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetchResults();
@@ -39,4 +40,17 @@ public class ReviewRepositoryImpI implements ReviewRepositoryCustom{
         List<Review> results = reviewQueryResults.getResults();
         return new PageImpl<>(results,pageable,total);
     }
+
+//    @Override
+//    public Page<Review> findReviewByBookId(Long bookId, Pageable pageable) {
+//        QueryResults<Review> reviewQueryResults = jpaQueryFactory.selectFrom(review)
+//                .join(review.book, book)
+//                .where(book.bookId.eq(bookId))
+//                .offset(pageable.getOffset())
+//                .limit(pageable.getPageSize())
+//                .fetchResults();
+//        long total = reviewQueryResults.getTotal();
+//        List<Review> results = reviewQueryResults.getResults();
+//        return new PageImpl<>(results,pageable,total);
+//    }
 }

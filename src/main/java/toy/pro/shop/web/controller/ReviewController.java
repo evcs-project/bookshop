@@ -3,9 +3,8 @@ package toy.pro.shop.web.controller;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import toy.pro.shop.web.review.dto.RequestDto.ReviewRegistRequestDto;
+import toy.pro.shop.web.review.dto.RequestDto.ReviewRegisterRequestDto;
 import toy.pro.shop.web.review.dto.RequestDto.ReviewUpdateRequestDto;
 import toy.pro.shop.web.review.dto.ResponseDto.ReviewResponseDto;
 import toy.pro.shop.web.review.service.ReviewService;
@@ -24,32 +23,32 @@ public class ReviewController {
 
     @ApiOperation("리뷰 등록하기")
     @PostMapping
-    public void reviewRegist(@RequestBody @Valid ReviewRegistRequestDto reviewRegistRequestDto)
+    public void reviewRegister(@RequestBody @Valid ReviewRegisterRequestDto requestDto)
     {
-        reviewService.reviewRegist(reviewRegistRequestDto);
+        reviewService.reviewRegister(requestDto);
     }
 
+
     @ApiOperation("리뷰 수정하기")
-    @PutMapping("/{reivewId}")
-    public void reviewUpdate(@PathVariable(value = "reivewId") Long id,
-                             @RequestBody @Validated ReviewUpdateRequestDto reviewUpdateRequestDto)
+    @PutMapping("/{reviewId}")
+    public void reviewUpdate(@PathVariable(value = "reviewId") Long reviewId,
+                             @RequestBody @Valid ReviewUpdateRequestDto reviewUpdateRequestDto)
     {
-        reviewService.reviewUpdate(id,reviewUpdateRequestDto);
+        reviewService.reviewUpdate(reviewId,reviewUpdateRequestDto);
     }
 
     @ApiOperation("리뷰 삭제하기")
     @DeleteMapping("/{reviewId}")
-    public void deleteReview(@PathVariable(value = "reviewId") Long id)
+    public void deleteReview(@PathVariable(value = "reviewId") Long reviewId)
     {
-        reviewService.deleteReview(id);
+        reviewService.deleteReview(reviewId);
     }
 
-    // TODO : 수정
     @ApiOperation("리뷰 조회하기")
     @GetMapping("/{reviewId}")
-    public ReviewResponseDto findbyId(@PathVariable(value = "reviewId") Long id)
+    public ReviewResponseDto findByReviewId(@PathVariable(value = "reviewId") Long reviewId)
     {
-        return reviewService.findById(id);
+        return reviewService.findByReviewId(reviewId);
     }
 
 }
