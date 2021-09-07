@@ -13,13 +13,9 @@ import toy.pro.shop.web.review.domain.Review;
 import toy.pro.shop.web.review.domain.ReviewRepository;
 import toy.pro.shop.web.review.dto.RequestDto.ReviewRegisterRequestDto;
 import toy.pro.shop.web.review.dto.RequestDto.ReviewUpdateRequestDto;
-import toy.pro.shop.web.review.dto.ResponseDto.BookReviewResponseDto;
-import toy.pro.shop.web.review.dto.ResponseDto.MemberReviewResponseDto;
-import toy.pro.shop.web.review.dto.ResponseDto.ReviewDto;
-import org.springframework.transaction.annotation.Transactional;
+import toy.pro.shop.web.review.dto.ResponseDto.ReviewResponseDto;
 
-import java.util.List;
-import java.util.stream.Collectors;
+import javax.transaction.Transactional;
 
 @RequiredArgsConstructor
 @Service
@@ -43,10 +39,10 @@ public class ReviewService {
     }
 
     @Transactional
-    public void reviewUpdate(Long reviewId, ReviewUpdateRequestDto requestDto) {
+    public void reviewUpdate(Long reviewId, ReviewUpdateRequestDto reviewUpdateRequestDto) {
         Review review = reviewRepository.findById(reviewId)
                 .orElseThrow(() -> new GlobalApiException(ErrorCode.DATA_NOT_FOUND));
-        review.reviewUpdate(requestDto.getTitle(), requestDto.getContent());
+        review.reviewUpdate(reviewUpdateRequestDto.getTitle(), reviewUpdateRequestDto.getContent());
     }
 
     @Transactional
@@ -54,45 +50,12 @@ public class ReviewService {
         Review review = reviewRepository.findById(reviewId)
                 .orElseThrow(() -> new GlobalApiException(ErrorCode.DATA_NOT_FOUND));
 
-        Member member = memberRepository.findByEmail(AuthUtil.getCurUserEmail())
-                .orElseThrow(() -> new GlobalApiException(ErrorCode.USER_NOT_FOUND));
-
-        if (! member.getId().equals(review.getMember().getId())) {
-            throw new GlobalApiException("잘못된 접근입니다.");
-        }
-
         reviewRepository.delete(review);
     }
 
-//    @Transactional(readOnly = true)
-//    public ReviewResponseDto findByReviewId(Long reviewId) {
-//        Review entity = reviewRepository.findById(reviewId)
-//                .orElseThrow(() -> new GlobalApiException(ErrorCode.DATA_NOT_FOUND));
-//        return new ReviewResponseDto(entity);
-//    }
-
-    @Transactional(readOnly = true)
-    public MemberReviewResponseDto findMemberReview() {
-        String curUserEmail = AuthUtil.getCurUserEmail();
-        Member member = memberRepository.findByEmail(curUserEmail)
-                .orElseThrow(() -> new GlobalApiException(ErrorCode.USER_NOT_FOUND));
-        List<ReviewDto> collect = member.getReviewList().stream()
-                .map(ReviewDto::toReviewDto).collect(Collectors.toList());
-        return new MemberReviewResponseDto(collect);
+    public ReviewResponseDto findByReviewId(Long reviewId) {
+        Review entity = reviewRepository.findById(reviewId)
+                .orElseThrow(() -> new GlobalApiException(ErrorCode.DATA_NOT_FOUND));
+        return new ReviewResponseDto(entity);
     }
-
-    @Transactional(readOnly = true)
-    public BookReviewResponseDto findBookReview(Long bookId) {
-        List<Review> reviewsByBookId = reviewRepository.findReviewByBookId(bookId);
-        List<ReviewDto> reviewDtoList = reviewsByBookId.stream()
-                .map(ReviewDto::toReviewDto)
-                .collect(Collectors.toList());
-
-        return new BookReviewResponseDto(reviewDtoList);
-    }
-//    public Page<Review> findReviewByBookId(Long bookId) {
-//        Book book = bookRepository.findById(bookId)
-//                .orElseThrow(() -> new GlobalApiException(ErrorCode.DATA_NOT_FOUND));
-//        return reviewRepository.findReviewByBookId(bookId);
-//    }
 }

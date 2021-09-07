@@ -9,11 +9,11 @@ import javax.validation.constraints.NotBlank;
 @NoArgsConstructor
 public class ReviewUpdateRequestDto {
 
-    @ApiModelProperty(value = "리뷰 제목 ID", notes = "수정할 리뷰 제목 ID", required = true)
+    @ApiModelProperty(value = "리뷰 제목")
     @NotBlank(message = "리뷰 제목을 입력해주세요.")
     private String title;
 
-    @ApiModelProperty(value = "리뷰 제목 ID", notes = "수정할 리뷰 제목 ID", required = true)
+    @ApiModelProperty(value = "리뷰 내용")
     @NotBlank(message = "리뷰 내용을 입력해주세요.")
     private String content;
 
