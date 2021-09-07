@@ -6,7 +6,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import toy.pro.shop.web.review.dto.RequestDto.ReviewRegisterRequestDto;
 import toy.pro.shop.web.review.dto.RequestDto.ReviewUpdateRequestDto;
-import toy.pro.shop.web.review.dto.ResponseDto.ReviewResponseDto;
+import toy.pro.shop.web.review.dto.ResponseDto.BookReviewResponseDto;
+import toy.pro.shop.web.review.dto.ResponseDto.MemberReviewResponseDto;
 import toy.pro.shop.web.review.service.ReviewService;
 
 import javax.validation.Valid;
@@ -23,32 +24,32 @@ public class ReviewController {
 
     @ApiOperation("리뷰 등록하기")
     @PostMapping
-    public void reviewRegister(@RequestBody @Valid ReviewRegisterRequestDto requestDto)
-    {
+    public void reviewRegister(@RequestBody @Valid ReviewRegisterRequestDto requestDto) {
         reviewService.reviewRegister(requestDto);
     }
-
 
     @ApiOperation("리뷰 수정하기")
     @PutMapping("/{reviewId}")
     public void reviewUpdate(@PathVariable(value = "reviewId") Long reviewId,
-                             @RequestBody @Valid ReviewUpdateRequestDto reviewUpdateRequestDto)
-    {
-        reviewService.reviewUpdate(reviewId,reviewUpdateRequestDto);
+                             @RequestBody @Valid ReviewUpdateRequestDto requestDto) {
+        reviewService.reviewUpdate(reviewId, requestDto);
     }
 
     @ApiOperation("리뷰 삭제하기")
     @DeleteMapping("/{reviewId}")
-    public void deleteReview(@PathVariable(value = "reviewId") Long reviewId)
-    {
+    public void deleteReview(@PathVariable(value = "reviewId") Long reviewId) {
         reviewService.deleteReview(reviewId);
     }
 
-    @ApiOperation("리뷰 조회하기")
-    @GetMapping("/{reviewId}")
-    public ReviewResponseDto findByReviewId(@PathVariable(value = "reviewId") Long reviewId)
-    {
-        return reviewService.findByReviewId(reviewId);
+    @ApiOperation("특정 책의 리뷰 리스트 가져오기")
+    @GetMapping("/{bookId}")
+    public BookReviewResponseDto getBookReviewByBookId(@PathVariable(value = "bookId") Long bookId) {
+        return reviewService.findBookReview(bookId);
     }
 
+    @ApiOperation("특정 유저의 리뷰 리스트 가져오기")
+    @GetMapping("/myReview")
+    public MemberReviewResponseDto getMemberReview() {
+        return reviewService.findMemberReview();
+    }
 }

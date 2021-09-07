@@ -1,9 +1,6 @@
 package toy.pro.shop.web.review.domain;
 
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import toy.pro.shop.web.book.domain.Book;
 import toy.pro.shop.web.member.domain.Member;
 

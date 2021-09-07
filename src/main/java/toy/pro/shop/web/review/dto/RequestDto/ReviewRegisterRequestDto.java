@@ -15,11 +15,11 @@ public class ReviewRegisterRequestDto {
     private Long bookId;
 //    private Long memberId;
 
-    @ApiModelProperty(value = "리뷰 제목 ID", notes = "수정할 리뷰 제목 ID", required = true)
+    @ApiModelProperty(value = "리뷰 제목", notes = "등록할 리뷰 제목", required = true)
     @NotBlank(message = "리뷰 제목을 입력해주세요.")
     private String title;
 
-    @ApiModelProperty(value = "리뷰 내용", notes = "수정할 리뷰 내용", required = true)
+    @ApiModelProperty(value = "리뷰 내용", notes = "등록할 리뷰 내용", required = true)
     @NotBlank(message = "리뷰 내용을 입력해주세요.")
     private String content;
 
