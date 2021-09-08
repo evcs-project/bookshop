@@ -11,17 +11,18 @@ import toy.pro.shop.web.cart.domain.Cart;
 @AllArgsConstructor
 @Builder
 public class CartDto {
-    private String bookname;
+    private String bookName;
     private int count;
     private String writer;
     private int price;
 
-    public static CartDto toCartDto(Cart cart){
+    public static CartDto toCartDto(Cart cart)
+    {
         return CartDto.builder()
-                .bookname(cart.getBook().getBookNm())
+                .bookName(cart.getBook().getBookNm())
                 .count(cart.getCount())
                 .writer(cart.getBook().getWriter())
-                .price(cart.getCount()*cart.getBook().getPrice().getValue())
+                .price(cart.getPrice())
                 .build();
     }
 }

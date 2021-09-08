@@ -28,7 +28,6 @@ public class ReviewController {
         reviewService.reviewRegister(requestDto);
     }
 
-
     @ApiOperation("리뷰 수정하기")
     @PutMapping("/{reviewId}")
     public void reviewUpdate(@PathVariable(value = "reviewId") Long reviewId,

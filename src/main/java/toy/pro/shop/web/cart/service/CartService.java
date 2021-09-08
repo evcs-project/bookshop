@@ -3,7 +3,6 @@ package toy.pro.shop.web.cart.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import toy.pro.shop.web.book.domain.Book;
@@ -60,7 +59,7 @@ public class CartService {
     public Long registerCart(CartRegistRequestDto cartRegistRequestDto)
     {
         String curUserEmail = AuthUtil.getCurUserEmail();
-        Book book = bookRepository.findById(cartRegistRequestDto.getBookid())
+        Book book = bookRepository.findById(cartRegistRequestDto.getBookId())
                 .orElseThrow(() -> new GlobalApiException(ErrorCode.DATA_NOT_FOUND));
         Member member = memberRepository.findByEmail(curUserEmail)
                 .orElseThrow(()->new GlobalApiException(ErrorCode.USER_NOT_FOUND));

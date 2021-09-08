@@ -34,14 +34,16 @@ public class Review {
     private Book book;
 
     @Builder // 빌더 패턴 클래스 생성
-    private Review(Book book, Member member, String title, String content) {
+    private Review(Book book, Member member, String title, String content)
+    {
         this.book = book;
         this.member = member;
         this.title = title;
         this.content = content;
     }
 
-    public static Review createReview(Book book, Member member, String title, String content) {
+    public static Review createReview(Book book, Member member, String title, String content)
+    {
         return Review.builder()
                 .book(book)
                 .member(member)
@@ -50,18 +52,20 @@ public class Review {
                 .build();
     }
 
-    public void reviewUpdate(String title, String content) {
+    public void reviewUpdate(String title, String content)
+    {
         this.title = title;
         this.content = content;
     }
 
-    // 연관관계 메서드 - 양방향
-    public void setMember(Member member) {
+    public void setMember(Member member)
+    {
         this.member = member;
         member.getReviewList().add(this);
     }
 
-    public void setBook(Book book) {
+    public void setBook(Book book)
+    {
         this.book = book;
         book.getReviewList().add(this);
     }

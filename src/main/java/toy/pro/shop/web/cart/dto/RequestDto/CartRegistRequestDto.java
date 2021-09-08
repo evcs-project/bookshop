@@ -16,7 +16,7 @@ public class CartRegistRequestDto {
 
     @ApiModelProperty(value = "책 ID", notes = "장바구니에 담을 책 ID",required = true)
     @NotNull(message = "책 Id를 입력해주세요")
-    private Long Bookid;
+    private Long BookId;
 
 
     @ApiModelProperty(value = "책 수량", example = "1", notes = "수량의 최소값은 1입니다..", required = true)

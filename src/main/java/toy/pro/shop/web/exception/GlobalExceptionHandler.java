@@ -19,6 +19,7 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(new ErrorResponse(
                 ErrorCode.PARAMETER_ERROR, HttpStatus.BAD_REQUEST.value(),  ex.getBindingResult()), HttpStatus.BAD_REQUEST);
     }
+
     @ExceptionHandler(GlobalApiException.class)
     public ResponseEntity<ErrorResponse> handleGlobalApiException(GlobalApiException ex)
     {

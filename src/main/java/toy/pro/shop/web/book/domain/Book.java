@@ -39,6 +39,4 @@ public class Book {
 
     @OneToMany(mappedBy = "book", fetch = FetchType.LAZY)
     List<Review> reviewList = new ArrayList<>();
-
-
 }

@@ -22,12 +22,14 @@ public class CartRepositoryImpl implements CartRepositoryCustom {
 
     private final JPAQueryFactory jpaQueryFactory;
 
-    public CartRepositoryImpl(EntityManager entityManager) {
+    public CartRepositoryImpl(EntityManager entityManager)
+    {
         this.jpaQueryFactory = new JPAQueryFactory(entityManager);
     }
 
     @Override
-    public Page<Cart> findCartByMemberemail(String useremail, Pageable pageable) {
+    public Page<Cart> findCartByMemberemail(String useremail, Pageable pageable)
+    {
         QueryResults<Cart> cartQueryResults = jpaQueryFactory.selectFrom(cart)
                 .join(cart.member, member)
                 .where(member.email.eq(useremail))
@@ -40,7 +42,8 @@ public class CartRepositoryImpl implements CartRepositoryCustom {
     }
 
     @Override
-    public Long updateCartcount(Long cartid, int count) {
+    public Long updateCartcount(Long cartid, int count)
+    {
         long execute = jpaQueryFactory.update(cart)
                 .set(cart.count, count)
                 .where(cart.cartId.eq(cartid))

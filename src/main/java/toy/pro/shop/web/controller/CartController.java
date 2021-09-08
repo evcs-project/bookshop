@@ -18,8 +18,8 @@ import javax.validation.Valid;
 @RequestMapping("/api/cart")
 @RequiredArgsConstructor
 public class CartController {
-    private final CartService cartService;
 
+    private final CartService cartService;
 
     @ApiOperation("장바구니에 담기")
     @PostMapping
@@ -36,20 +36,17 @@ public class CartController {
     }
 
     @ApiOperation("장바구니에서 삭제하기")
-    @DeleteMapping("/delete/{cartid}")
-    public void deleteCart(@PathVariable(value = "cartid") Long id)
+    @DeleteMapping("/delete/{cartId}")
+    public void deleteCart(@PathVariable(value = "cartId") Long cartId)
     {
-        cartService.deleteCartById(id);
+        cartService.deleteCartById(cartId);
     }
 
 
     @ApiOperation("장바구니에 담은 수량 수정하기")
-    @PutMapping("/update/{cartid}")
-    public void updateCart(@PathVariable(value = "cartid") Long id
-            , @RequestBody @Valid CartUpdateRequestDto cartUpdateRequestDto)
+    @PutMapping("/update")
+    public void updateCart(@RequestBody @Valid CartUpdateRequestDto cartUpdateRequestDto)
     {
         cartService.updateCart(cartUpdateRequestDto);
     }
-
-
 }

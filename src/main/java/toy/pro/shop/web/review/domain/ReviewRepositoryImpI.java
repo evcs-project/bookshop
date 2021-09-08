@@ -41,16 +41,4 @@ public class ReviewRepositoryImpI implements ReviewRepositoryCustom{
         return new PageImpl<>(results,pageable,total);
     }
 
-//    @Override
-//    public Page<Review> findReviewByBookId(Long bookId, Pageable pageable) {
-//        QueryResults<Review> reviewQueryResults = jpaQueryFactory.selectFrom(review)
-//                .join(review.book, book)
-//                .where(book.bookId.eq(bookId))
-//                .offset(pageable.getOffset())
-//                .limit(pageable.getPageSize())
-//                .fetchResults();
-//        long total = reviewQueryResults.getTotal();
-//        List<Review> results = reviewQueryResults.getResults();
-//        return new PageImpl<>(results,pageable,total);
-//    }
 }

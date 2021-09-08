@@ -32,5 +32,10 @@ public class Cart {
         this.book = book;
         this.member = member;
     }
+
+    public int getPrice()
+    {
+        return getCount() * this.getBook().getPrice().getValue();
+    }
 }
 
