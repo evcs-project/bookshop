@@ -3,7 +3,6 @@ package toy.pro.shop.web.controller;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
 import toy.pro.shop.web.cart.dto.RequestDto.CartGetRequestDto;
 import toy.pro.shop.web.cart.dto.RequestDto.CartRegistRequestDto;
@@ -26,17 +25,15 @@ public class CartController {
     @PostMapping
     public void addCart(@RequestBody @Valid CartRegistRequestDto cartRegistRequestDto)
     {
-        cartService.registCart(cartRegistRequestDto);
+        cartService.registerCart(cartRegistRequestDto);
     }
-
 
     @ApiOperation("나의 장바구니 가져오기")
-    @GetMapping("/mycart")
+    @GetMapping("/my-cart")
     public CartResponseDto getMyCart(@Valid CartGetRequestDto cartGetRequestDto)
     {
-        return cartService.getMycartlist(cartGetRequestDto);
+        return cartService.getMyCartList(cartGetRequestDto);
     }
-
 
     @ApiOperation("장바구니에서 삭제하기")
     @DeleteMapping("/delete/{cartid}")
@@ -51,7 +48,7 @@ public class CartController {
     public void updateCart(@PathVariable(value = "cartid") Long id
             , @RequestBody @Valid CartUpdateRequestDto cartUpdateRequestDto)
     {
-        cartService.UpdteCart(cartUpdateRequestDto);
+        cartService.updateCart(cartUpdateRequestDto);
     }
 
 

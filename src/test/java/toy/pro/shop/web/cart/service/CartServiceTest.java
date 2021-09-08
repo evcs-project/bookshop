@@ -1,6 +1,5 @@
 package toy.pro.shop.web.cart.service;
 
-import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -9,7 +8,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 import toy.pro.shop.web.book.domain.BookRepository;
 import toy.pro.shop.web.book.dto.request.BookSearchRequestDto;
@@ -63,11 +61,11 @@ class CartServiceTest {
         Long bookId2 = bookSearchResponseDto2.getBookId();
 
 
-        Long aLong = cartService.registCart(new CartRegistRequestDto(bookId, 3));
-        Long aLong1 = cartService.registCart(new CartRegistRequestDto(bookId1, 5));
-        Long aLong2 = cartService.registCart(new CartRegistRequestDto(bookId2, 2));
-        Long aLong3 = cartService.registCart(new CartRegistRequestDto(bookId, 7));
-        Long aLong4 = cartService.registCart(new CartRegistRequestDto(bookId1, 9));
+        Long aLong = cartService.registerCart(new CartRegistRequestDto(bookId, 3));
+        Long aLong1 = cartService.registerCart(new CartRegistRequestDto(bookId1, 5));
+        Long aLong2 = cartService.registerCart(new CartRegistRequestDto(bookId2, 2));
+        Long aLong3 = cartService.registerCart(new CartRegistRequestDto(bookId, 7));
+        Long aLong4 = cartService.registerCart(new CartRegistRequestDto(bookId1, 9));
 
         PageRequest of = PageRequest.of(0, 3);
 
@@ -103,12 +101,12 @@ class CartServiceTest {
         Long bookId2 = bookSearchResponseDto2.getBookId();
 
 
-        Long aLong = cartService.registCart(new CartRegistRequestDto(bookId, 3));
-        Long aLong1 = cartService.registCart(new CartRegistRequestDto(bookId1, 5));
+        Long aLong = cartService.registerCart(new CartRegistRequestDto(bookId, 3));
+        Long aLong1 = cartService.registerCart(new CartRegistRequestDto(bookId1, 5));
 
-        Long aLong2 = cartService.registCart(new CartRegistRequestDto(bookId2, 2));
-        Long aLong3 = cartService.registCart(new CartRegistRequestDto(bookId, 7));
-        Long aLong4 = cartService.registCart(new CartRegistRequestDto(bookId1, 9));
+        Long aLong2 = cartService.registerCart(new CartRegistRequestDto(bookId2, 2));
+        Long aLong3 = cartService.registerCart(new CartRegistRequestDto(bookId, 7));
+        Long aLong4 = cartService.registerCart(new CartRegistRequestDto(bookId1, 9));
 
         cartService.deleteCartById(aLong);
 
@@ -120,7 +118,7 @@ class CartServiceTest {
 
 
         CartResponseDto mycartlist = cartService
-                .getMycartlist(CartGetRequestDto.builder().page(0).size(3).build());
+                .getMyCartList(CartGetRequestDto.builder().page(0).size(3).build());
 
         assertThat(mycartlist.getCartDtoPage().getContent().size()).isEqualTo(3);
         assertThat(mycartlist.getCartDtoPage().getContent().get(0).getCount()).isEqualTo(5);
@@ -145,14 +143,14 @@ class CartServiceTest {
         Long bookId2 = bookSearchResponseDto2.getBookId();
 
 
-        Long aLong = cartService.registCart(new CartRegistRequestDto(bookId, 3));
-        Long aLong1 = cartService.registCart(new CartRegistRequestDto(bookId1, 5));
-        Long aLong2 = cartService.registCart(new CartRegistRequestDto(bookId2, 2));
-        Long aLong3 = cartService.registCart(new CartRegistRequestDto(bookId, 7));
-        Long aLong4 = cartService.registCart(new CartRegistRequestDto(bookId1, 9));
+        Long aLong = cartService.registerCart(new CartRegistRequestDto(bookId, 3));
+        Long aLong1 = cartService.registerCart(new CartRegistRequestDto(bookId1, 5));
+        Long aLong2 = cartService.registerCart(new CartRegistRequestDto(bookId2, 2));
+        Long aLong3 = cartService.registerCart(new CartRegistRequestDto(bookId, 7));
+        Long aLong4 = cartService.registerCart(new CartRegistRequestDto(bookId1, 9));
 
 
-        CartResponseDto mycartlist = cartService.getMycartlist(CartGetRequestDto.builder()
+        CartResponseDto mycartlist = cartService.getMyCartList(CartGetRequestDto.builder()
                 .size(3).page(0).build());
 
 
@@ -179,20 +177,20 @@ class CartServiceTest {
         Long bookId2 = bookSearchResponseDto2.getBookId();
 
 
-        Long aLong = cartService.registCart(new CartRegistRequestDto(bookId, 3));
-        Long aLong1 = cartService.registCart(new CartRegistRequestDto(bookId1, 5));
-        Long aLong2 = cartService.registCart(new CartRegistRequestDto(bookId2, 2));
-        Long aLong3 = cartService.registCart(new CartRegistRequestDto(bookId, 7));
-        Long aLong4 = cartService.registCart(new CartRegistRequestDto(bookId1, 9));
+        Long aLong = cartService.registerCart(new CartRegistRequestDto(bookId, 3));
+        Long aLong1 = cartService.registerCart(new CartRegistRequestDto(bookId1, 5));
+        Long aLong2 = cartService.registerCart(new CartRegistRequestDto(bookId2, 2));
+        Long aLong3 = cartService.registerCart(new CartRegistRequestDto(bookId, 7));
+        Long aLong4 = cartService.registerCart(new CartRegistRequestDto(bookId1, 9));
 
 
-        cartService.UpdteCart(CartUpdateRequestDto.builder().Cartid(aLong).count(13).build());
-        cartService.UpdteCart(CartUpdateRequestDto.builder().Cartid(aLong4).count(12).build());
+        cartService.updateCart(CartUpdateRequestDto.builder().Cartid(aLong).count(13).build());
+        cartService.updateCart(CartUpdateRequestDto.builder().Cartid(aLong4).count(12).build());
 
-        CartResponseDto mycartlist = cartService.getMycartlist(CartGetRequestDto.builder()
+        CartResponseDto mycartlist = cartService.getMyCartList(CartGetRequestDto.builder()
                 .size(3).page(0).build());
 
-        CartResponseDto mycartlist1 = cartService.getMycartlist(CartGetRequestDto.builder()
+        CartResponseDto mycartlist1 = cartService.getMyCartList(CartGetRequestDto.builder()
                 .size(3).page(1).build());
 
         assertThat(mycartlist.getCartDtoPage().getContent().get(0).getCount()).isEqualTo(13);

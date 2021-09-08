@@ -21,9 +21,6 @@ import toy.pro.shop.web.member.auth.AuthUtil;
 import toy.pro.shop.web.member.domain.Member;
 import toy.pro.shop.web.member.domain.MemberRepository;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 @Service
 @RequiredArgsConstructor
 public class CartService {
@@ -34,7 +31,7 @@ public class CartService {
 
 
     @Transactional(readOnly = true)
-    public CartResponseDto getMycartlist(CartGetRequestDto cartGetRequestDto)
+    public CartResponseDto getMyCartList(CartGetRequestDto cartGetRequestDto)
     {
         String curUserEmail = AuthUtil.getCurUserEmail();
         Page<Cart> cartByMemberId = cartRepository
@@ -46,13 +43,21 @@ public class CartService {
     }
 
     @Transactional
-    public void deleteCartById(Long cartid)
+    public void deleteCartById(Long cartId)
     {
-        cartRepository.deleteById(cartid);
+        Member member = memberRepository.findByname(AuthUtil.getCurUserEmail());
+        Cart cart = cartRepository.findById(cartId).orElseThrow(IllegalArgumentException::new);
+
+        if (!cart.getMember().getId().equals(member.getId()))
+        {
+            throw new GlobalApiException(ErrorCode.LOGIC_ERROR);
+        }
+
+        cartRepository.delete(cart);
     }
 
     @Transactional
-    public Long registCart(CartRegistRequestDto cartRegistRequestDto)
+    public Long registerCart(CartRegistRequestDto cartRegistRequestDto)
     {
         String curUserEmail = AuthUtil.getCurUserEmail();
         Book book = bookRepository.findById(cartRegistRequestDto.getBookid())
@@ -63,11 +68,9 @@ public class CartService {
     }
 
     @Transactional
-    public Long UpdteCart(CartUpdateRequestDto cartUpdateRequestDto)
+    public void updateCart(CartUpdateRequestDto cartUpdateRequestDto)
     {
-        return cartRepository
-                .updateCartcount(cartUpdateRequestDto.getCartid()
-                        , cartUpdateRequestDto.getCount());
+        cartRepository.updateCartcount(cartUpdateRequestDto.getCartid(), cartUpdateRequestDto.getCount());
     }
 
 }

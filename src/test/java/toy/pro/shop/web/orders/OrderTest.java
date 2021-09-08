@@ -31,20 +31,12 @@ public class OrderTest {
         List<OrdersBook> ordersBooks = new ArrayList<>();
         ordersBooks.add(ordersBook);
 
-        Receiver receiver = new Receiver("받는사람", "01230");
-
-        Address address = new Address("12312", "123213");
-
         OrdererDto orderer = new OrdererDto(1L, "TestUser");
 
         Orders order = Orders.createOrder(ordersBooks, orderer, new ShippingInfoRequestDto());
-        //Orders order = Orders.createOrder(ordersBooks, orderer, new ShippingInfoRequest(receiver, address));
-
-       // orderRepository.save(order);
 
         Assertions.assertEquals(1L, order.getOrderer().getMemberId().getId());
-        //Assertions.assertEquals(1L, order.getOrderer().getMemberId().getId());
-        //Assertions.assertEquals("받는사람", order.getShippingInfoRequest().getReceiver().getName());
+
     }
 
 }
